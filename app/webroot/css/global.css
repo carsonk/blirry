@@ -1,0 +1,22 @@
+/*
+* General
+* Selectors whose place in the DOM cannot is not consistently
+* predictable (e.g. input, table).
+*/
+
+
+
+/*
+* DOM Ordered
+* Selectors whose place in the DOM is predictable.
+*/
+
+body {
+  padding-top: 50px;
+}
+
+.navbar-brand {
+	font-family: 'Pacifico', cursive;
+	font-size: 18pt;
+	margin-top: -2px;
+}

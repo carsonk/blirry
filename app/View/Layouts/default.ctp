@@ -16,7 +16,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
+$cakeDescription = __d('cake_dev', 'blirry');
 $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 ?>
 <!DOCTYPE html>
@@ -27,39 +27,35 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		<?php echo $cakeDescription ?>:
 		<?php echo $title_for_layout; ?>
 	</title>
+	<link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+
 	<?php
 		echo $this->Html->meta('icon');
+		echo $this->Html->css('bootstrap');
+		echo $this->Html->css('bootstrap-theme');
+		echo $this->Html->css('global');
 
-		echo $this->Html->css('cake.generic');
-
-		echo $this->fetch('meta');
-		echo $this->fetch('css');
-		echo $this->fetch('script');
+		echo $this->Html->script('jquery');
+		echo $this->Html->script('bootstrap');
 	?>
 </head>
 <body>
-	<div id="container">
-		<div id="header">
-			<h1><?php echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>
-		</div>
-		<div id="content">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    	<div class="container">
+    		<div class="navbar-header">
+      			<a class="navbar-brand" href="#">blirry</a>
+    		</div>
+        	<div class="collapse navbar-collapse">
+          		<ul class="nav navbar-nav navbar-right">
+	            	<li class="active"><a href="#">Home</a></li>
+	            	<li><a href="#about">About</a></li>
+	          	</ul>
+        	</div><!--/.nav-collapse -->
+      	</div>
+    </nav>
 
-			<?php echo $this->Session->flash(); ?>
-
-			<?php echo $this->fetch('content'); ?>
-		</div>
-		<div id="footer">
-			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-					'http://www.cakephp.org/',
-					array('target' => '_blank', 'escape' => false, 'id' => 'cake-powered')
-				);
-			?>
-			<p>
-				<?php echo $cakeVersion; ?>
-			</p>
-		</div>
-	</div>
-	<?php echo $this->element('sql_dump'); ?>
+    <div class="container">
+    	<?php echo $this->fetch('content'); ?>
+    </div><!-- /.container -->
 </body>
 </html>
