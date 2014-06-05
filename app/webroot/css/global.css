@@ -2,9 +2,22 @@
 * General
 * Selectors whose place in the DOM cannot is not consistently
 * predictable (e.g. input, table).
+* Order alphabetically, unless consistently child of another selector.
 */
 
+.form-group .error-message {
+  margin-top: 3px;
+  padding: 5px 15px;
+}
 
+.image-resize-64 {
+  width: 64px;
+  height: 64px;
+}
+.image-resize-100 {
+  width: 100px;
+  height: 100px;
+}
 
 /*
 * DOM Ordered
@@ -15,8 +28,14 @@ body {
   padding-top: 50px;
 }
 
-.navbar-brand {
-	font-family: 'Pacifico', cursive;
-	font-size: 18pt;
-	margin-top: -2px;
+.navbar {
+}
+	.navbar-brand {
+		font-family: 'Pacifico', cursive;
+		font-size: 20pt;
+		margin-top: -2px;
+	}
+
+.tagline-jumbotron {
+	background: none;
 }
