@@ -17,7 +17,6 @@ function QuizCreator() {
     $.when( 
       this.quizDataSetup(quizData) 
     ).then(function() {
-      console.log(this.quizData);
       if(instance.quizData.Personality.length > 0) {
         $.each(instance.quizData.Personality, function(key, currentPers) {
           instance.Personalities.add(currentPers);
