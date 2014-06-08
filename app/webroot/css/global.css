@@ -5,6 +5,10 @@
 * Order alphabetically, unless consistently child of another selector.
 */
 
+.clone-templates {
+  display: none;
+}
+
 .form-group .error-message {
   margin-top: 3px;
   padding: 5px 15px;
@@ -17,6 +21,43 @@
 .image-resize-100 {
   width: 100px;
   height: 100px;
+}
+.image-resize-300-200 {
+  width: 300px;
+  height: 200px;
+}
+
+.inline-list {
+  list-style-type: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: table-row;
+}
+  .inline-list li {
+    display: table-cell;
+    margin: 0;
+    padding: 0 3px;
+  }
+    .inline-list li:first-child {
+      padding: 0 3px 0 0;
+    }
+
+.thumbnail-link {
+  cursor: pointer;
+}
+  .thumbnail-link:hover {
+    background-color: #EEE;
+  }
+
+.width-30 {
+  width: 30%;
+}
+.width-50 {
+  width: 50%;
+}
+.width-70 {
+  width: 70%;
 }
 
 /*
@@ -39,3 +80,31 @@ body {
 .tagline-jumbotron {
 	background: none;
 }
+
+
+/*
+* Quizzes Controller
+*/
+
+.personality {
+  display: inline-block;
+  vertical-align: top;
+  width: 49%;
+  margin-left: 2px;
+}
+
+.option-manage-section {
+  margin-top: 5px;
+}
+  .traits-panel {
+    display: inline-block;
+    width: 49%;
+    float: left;
+  }
+  .option-settings-panel {
+    display: inline-block;
+    width: 49%;
+    margin-left: 2px;
+    float: right;
+    height: 100%;
+  }

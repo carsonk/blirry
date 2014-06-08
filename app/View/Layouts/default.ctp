@@ -1,33 +1,19 @@
 <?php
-/**
- *
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.View.Layouts
- * @since         CakePHP(tm) v 0.10.0.1076
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-
-$cakeDescription = __d('cake_dev', 'blirry');
-$cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
+$globalTitle = 'blirry';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php echo $cakeDescription ?>:
+		<?php echo $globalTitle; ?>:
 		<?php echo $title_for_layout; ?>
 	</title>
 	<link href="http://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css">
+
+  <script type="text/javascript">
+    var root = "<?php echo $this->Html->url('/',true); ?>";
+  </script>
 
 	<?php
 		echo $this->Html->meta('icon');
@@ -36,7 +22,9 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 		echo $this->Html->css('global');
 
 		echo $this->Html->script('jquery');
+    echo $this->Html->script('jquery-ui');
 		echo $this->Html->script('bootstrap');
+    echo $this->Html->script('app');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -55,7 +43,6 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
 	            	<li><a href="#">Surveys</a></li>
 	            	<li><a href="#">Create</a></li>
 	          	</ul>
-
 
         			<?php
         				$loginUrl = $this->Html->url(array(
@@ -84,7 +71,7 @@ $cakeVersion = __d('cake_dev', 'CakePHP %s', Configure::version())
         	</div><!--/.nav-collapse -->
       	</div>
     </nav>
-
+    
     <div class="container content-container">
     	<?php echo $this->fetch('content'); ?>
     </div>

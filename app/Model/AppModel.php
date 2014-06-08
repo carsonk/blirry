@@ -30,4 +30,16 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
+  public $htmlAllowed = array();
+
+  public function beforeSave($options = array()) {
+    foreach($this->data[$this->alias] as $key => &$value) {
+      // Value is passed by reference.
+      if(!in_array($key, $this->htmlAllowed)) {
+        $value = htmlspecialchars_decode($value);
+        $value = htmlspecialchars($value);
+      }
+    }
+    return true;
+  }
 }
