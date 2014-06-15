@@ -3,6 +3,8 @@
 App::uses('AppModel', 'Model');
 
 class Quiz extends AppModel {
+  public $actsAs = array('Containable');
+  
   public $belongsTo = array(
     'Creator' => array(
       'className' => 'User',

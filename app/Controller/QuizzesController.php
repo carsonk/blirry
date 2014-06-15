@@ -28,7 +28,17 @@ class QuizzesController extends AppController {
     if($this->request->is('get')) {
       $currentQuiz = $this->Quiz->find('first', array(
         'conditions' => array('Quiz.id' => $this->request->query['quizID']),
-        'fields' => array('Quiz.*', 'Creator.id', 'Creator.username')
+        'contain' => array(
+          'Creator' => array(
+            'fields' => array('Creator.id', 'Creator.username')
+          ),
+          'Personality',
+          'Question' => array(
+            'Option' => array(
+              'fields' => array('id', 'title')
+            )
+          )
+        )
       ));
 
       if(!$currentQuiz) {

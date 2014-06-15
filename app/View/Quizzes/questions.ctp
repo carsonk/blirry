@@ -8,7 +8,14 @@ $this->end();
 ?>
 
 <div class="page-header">
-  <h1>Make your quiz! <small>You are making a <?php echo $quizTypeForDisplay; ?> quiz.</small></h1>
+  <h1>
+    Make your quiz! <small>You are making a <?php echo $quizTypeForDisplay; ?> quiz.</small>
+
+    <div class="pull-right">
+      <button class="btn btn-primary">Save Quiz</button>
+      <button class="btn btn-default"><span class="glyphicon glyphicon-cog"></button>
+    </div>
+  </h1>
 </div>
 
 <?php echo $this->Form->create('Quiz'); ?>
@@ -39,8 +46,8 @@ $this->end();
   <span>Add some possible personalities!</span> 
   <button class="add-personality btn btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Add Personality</button>
 </h2>
-<div class="personality-manage-panel panel panel-default">
-  <div class="panel-body personality-manage-panel-body">
+<div class="personality-manage-panel">
+  <div class="personality-manage-panel-body">
 
   </div>
 </div>
@@ -49,8 +56,8 @@ $this->end();
   <span>Add some questions!</span> 
   <button class="add-question btn btn-default pull-right"><span class="glyphicon glyphicon-plus"></span> Add Question</button>
 </h2>
-<div class="question-manage-panel panel panel-default">
-  <div class="panel-body question-manage-panel-body">
+<div class="question-manage-panel">
+  <div class="question-manage-panel-body">
 
   </div>
 </div>
@@ -105,76 +112,78 @@ $this->end();
 
   <!-- Question Form -->
   <div class="question-form-template">
-    <div class="question panel panel-default">
+    <div class="question panel panel-default" id="question-{ITERATION}" data-iteration="{ITERATION}" data-removed="false" data-dbkey="{KEY}">
       <div class="panel-heading">
 
         <div class="input-group" style="width:100%;">
-          <input type="text" class="question-title-field form-control" id="question" placeholder="Question Title" />
+          <span class="drag-handle input-group-addon" data-toggle="tooltip" data-placement="top" title="Click to drag.">
+            <span class="glyphicon glyphicon-move"></span>
+          </span>
+          <input type="text" value="{QUESTION}" class="question-title-field form-control" id="question" placeholder="Ask a question?" />
           <span class="input-group-btn">
-            <button class="btn btn-warning">Remove</button>
+            <button class="btn btn-warning" onclick="quizCreator.Questions.remove('{ITERATION}');">Remove</button>
           </span>
         </div>
 
       </div>
 
-      <div class="panel-body">
-
-        <div class="input-group" style="width:100%;">
-          <input type="text" class="question-title-field form-control" id="question" placeholder="Option 1" />
-
-          <span class="input-group-btn">
-            <button class="btn btn-default">
-              <span class="glyphicon glyphicon-remove"></span>
-            </button>
-          </span>
-        </div>
-
-        <div class="option-manage-section">
-          <div class="panel panel-default traits-panel">
-            <div class="panel-heading">
-              Traits Configuration
-            </div>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th class="width-70">Trait</th>
-                  <th class="width-30">
-                    <abbr title="Use negative to remove.">Add/Remove Points</abbr>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <select class="traits-select form-control"></select>
-                  </td>
-                  <td>
-                    <input class="form-control" type="number" min="-100" max="100" value="0" />
-                  </td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan="2">
-                    <button class="btn btn-primary btn-block">Add Trait</button>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
-
-          <div class="panel panel-default option-settings-panel">
-            <div class="panel-heading">
-              Settings
-            </div>
-            <div class="panel-body">
-              No available settings.
-            </div>
-          </div>
+      <div class="panel-body question-body">
+        <div class="question-toolbar">
+          <button class="btn btn-default btn-sm" onclick="quizCreator.Options.add(null, {ITERATION})">Add Option</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Option -->
+  <div class="option-template">
+    <div class="option" id="option-{ITERATION}" data-question="{QUESTION-ITERATION}" data-option="{ITERATION}" data-dbkey="{KEY}" data-removed="false">
+      <div class="input-group" style="width:100%;">
+        <input type="text" class="option-title-field form-control" placeholder="Option" value="{TITLE}" />
+
+        <span class="input-group-btn">
+          <button class="btn btn-default" onclick="quizCreator.Options.remove('{ITERATION}');">
+            <span class="glyphicon glyphicon-remove"></span>
+          </button>
+        </span>
+      </div>
+      <div class="option-manage-section">
+        <div class="panel panel-default traits-panel">
+          <div class="panel-heading">
+            Traits Configuration
+
+            <button class="btn btn-default btn-sm pull-right" onclick="quizCreator.Traits.add(null, {ITERATION})">
+              <span class="glyphicon glyphicon-plus"></span>
+              Add
+            </button>
+          </div>
+          <table class="table traits-config-table">
+            <thead>
+              <th class="width-70">Personality</th>
+              <th class="width-30">
+                <abbr title="Use negative to remove.">Add/Remove Points</abbr>
+              </th>
+            </thead>
+            <tbody class="traits-tbody faux-tbody">
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trait -->
+  <table class="trait-template">
+    <tr id="trait-{ITERATION}" class="trait" data-question="{QUESTION-ITERATION}" data-option="{OPTION-ITERATION}" data-trait="{ITERATION}" data-removed="false">
+      <td>
+        <select id="traits-select-{ITERATION}" class="traits-select form-control">
+          <option class="trait-option-blank" value=""></option>
+        </select>
+      </td>
+      <td>
+        <input class="form-control" type="number" min="-100" max="100" value="{POINTS}" />
+      </td>
+    </tr>
+  </table>
 </div>

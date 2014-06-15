@@ -43,6 +43,32 @@
       padding: 0 3px 0 0;
     }
 
+.panel-heading .btn-sm {
+  margin-top: -5px;
+  margin-right: -6px;
+}
+
+.faux-table {
+  display: table;
+  width: 100%;
+}
+  .faux-thead {
+    display: table-header-group;
+  }
+  .faux-tbody {
+    display: table-row-group;
+  }
+  .faux-row {
+    display: table-row;
+  }
+    .faux-th {
+      display; table-cell;
+      font-weight: bold;
+    }
+    .faux-cell {
+      display: table-cell;
+    }
+
 .thumbnail-link {
   cursor: pointer;
 }
@@ -66,21 +92,54 @@
 */
 
 body {
-  padding-top: 50px;
+  padding-top: 15px;
+  background-color: #FFF;
+  background: #222;
 }
 
 .navbar {
+  color: #FFF;
+  margin-bottom: 0;
+  border: none;
 }
+  .navbar .container {
+    background: none;
+  }
 	.navbar-brand {
 		font-family: 'Pacifico', cursive;
 		font-size: 20pt;
 		margin-top: -2px;
+    color: #FFF;
+    font-weight: lighter;
 	}
+    .navbar-brand:hover {
+      color: #EEE;
+    }
+  .navbar ul.nav > li > a {
+    color: #FFF;
+  }
+    ul.nav > li > a:hover {
+      color: #EEE+;
+      background-color: #333 !important;
+    }
+    ul.nav > li > li:hover {
+      background-color: #333 !important;
+    }
+  .navbar .nav .open > a,
+    .nav .open > a:hover,
+    .nav .open > a:focus {
+      background-color: inherit !important;
+      border-color: inherit !important;
+    }
 
-.tagline-jumbotron {
-	background: none;
+.content-container {
+  /*box-shadow: 0 0px 20px 3px #ccc;*/
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 30px;
+  min-height: 500px;
+  background: rgba(255,255,255,1);
 }
-
 
 /*
 * Quizzes Controller
@@ -93,18 +152,14 @@ body {
   margin-left: 2px;
 }
 
-.option-manage-section {
-  margin-top: 5px;
+.question-toolbar {
+  margin-bottom: 5px;
 }
-  .traits-panel {
-    display: inline-block;
-    width: 49%;
-    float: left;
-  }
-  .option-settings-panel {
-    display: inline-block;
-    width: 49%;
-    margin-left: 2px;
-    float: right;
-    height: 100%;
+
+.option {
+  margin-top: 3px;
+}
+  .option-manage-section {
+    margin-top: 5px;
+    display: none;
   }
