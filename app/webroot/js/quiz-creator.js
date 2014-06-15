@@ -1,3 +1,7 @@
+/*
+* QuizCreator
+* Gets shit related to quiz creation done.
+*/
 function QuizCreator() {
   // Properties
   var instance = this;
@@ -227,17 +231,13 @@ function QuizCreator() {
 
   this.Traits = new function() {
     this.currentIteration = 0;
-    this.traitClone = $(".clone-templates .trait-template").html();
+    this.traitClone = $(".clone-templates .trait-template").html().replace('<tbody>', '').replace('</tbody>',''); // Fuck you, innerHTML.
     this.traitOptionTemplate = '<option {SELECTED} class="trait-option trait-option-{PERSONALITY-ITERATION}" data-personalitykey="{PERSONALITY-KEY}">{PERSONALITY-TITLE}</option>';
 
     this.add = function(trait, optionIteration) {
-      console.log('running');
-
       var updatedCloneHtml = this.traitClone;
       var questionIteration = $("#option-" + optionIteration).data("question");
       var pointsValue = (typeof(trait) !== "undefined" && trait != null) ? trait.points : 0;
-
-      console.log(this.traitClone);
 
       updatedCloneHtml = updatedCloneHtml.replace(/\{ITERATION\}/g, this.currentIteration).replace(/\{OPTION-ITERATION\}/g, optionIteration).replace('{POINTS}', pointsValue);
 
