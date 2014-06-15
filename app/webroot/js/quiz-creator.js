@@ -62,6 +62,9 @@ function QuizCreator() {
     return toReturn;
   };
 
+  /*
+  * Sets up base listeners.
+  */
   this.setupListeners = function() {
     $(".add-personality").click(function() {
       instance.Personalities.add();
@@ -71,8 +74,8 @@ function QuizCreator() {
       instance.Questions.add();
     });
 
+    instance.Personalities.startTitleListener();
     instance.Questions.startSortableListener();
-
     instance.Options.startConfigListeners();
   };
 
@@ -87,6 +90,39 @@ function QuizCreator() {
     }, "json");
   };
 
+  /*
+  * Gets serialized metadata about quiz (e.g. title, tagline)
+  * @returns array Array containing form data.
+  */
+  this.getSerializedMeta = function() {
+    var serialized = $("#QuizQuestionsForm").serializeObject();
+    return serialized;
+  };
+
+  this.save = function() {
+    var quizData = instance.getSerializedMeta();
+    var personalityData = instance.Personalities.getSerialized();
+    var questionData = instance.Questions.getSerialized();
+
+    var postData = {
+      "Quiz": quizData,
+      "Personality": personalityData,
+      "Question": questionData
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "",
+      // The key needs to match your method's input parameter (case-sensitive).
+      data: JSON.stringify(postData),
+      contentType: "application/json; charset=utf-8",
+      dataType: "json",
+      success: function(data) { console.log(data); },
+      failure: function(errMsg) {
+          console.log(errMsg);
+      }
+    });
+  }
 
   // Inner Objects
   this.Personalities = new function() {
@@ -101,11 +137,13 @@ function QuizCreator() {
       } else {
         updatedCloneHtml = updatedCloneHtml.replace(/\{ITERATION\}/g, this.currentIteration).replace("{TITLE}", "").replace("{DETAILS}", "").replace("{IMAGE-URL}", "").replace(/\{KEY\}/g, "0");
       }
-      
 
       $(".personality-manage-panel-body").append(updatedCloneHtml);
 
-      if(!personality) {
+      if(personality) {
+        instance.Traits.addPersonalityToSelects(personality, this.currentIteration);
+      } else {
+        instance.Traits.addPersonalityToSelects(null, this.currentIteration);
         $.scrollTo($("#personality-" + this.currentIteration), { duration: 500, over: -.5 });
       }
 
@@ -119,6 +157,19 @@ function QuizCreator() {
       $(element).data("removed", "true");
       $(element).hide();
     };
+
+    this.startTitleListener = function() {
+      $(".personality-manage-panel-body").on("blur", ".question-title-field", function() {
+        var personalityIteration = $(this).parents(".personality").data("iteration");
+        var newTitle = $(this).val();
+
+        instance.Traits.updatePersonalitiesInSelects(personalityIteration, newTitle);
+      });
+    };
+
+    this.getSerialized = function() {
+
+    }
   };
 
   this.Questions = new function() {
@@ -172,6 +223,10 @@ function QuizCreator() {
     this.serializeSort = function() {
       return $( ".question-manage-panel-body" ).sortable( "serialize", { key: "sort" } );
     }
+
+    this.getSerialized = function() {
+
+    }
   };
   // </questions>
 
@@ -190,7 +245,11 @@ function QuizCreator() {
 
       $("#question-" + questionIteration + " .question-body").append(updatedCloneHtml);
 
-      if(!option) {
+      if(option) {
+        $.each(option.Trait, function(key, trait) {
+          instance.Traits.add(trait, instance.Options.currentIteration);
+        });
+      } else {
         instance.Traits.add(null, this.currentIteration);
       }
 
@@ -227,15 +286,19 @@ function QuizCreator() {
     this.serializeSort = function() {
 
     };
+
+    this.getSerialized = function() {
+
+    }
   };
 
   this.Traits = new function() {
     this.currentIteration = 0;
-    this.traitClone = $(".clone-templates .trait-template").html().replace('<tbody>', '').replace('</tbody>',''); // Fuck you, innerHTML.
-    this.traitOptionTemplate = '<option {SELECTED} class="trait-option trait-option-{PERSONALITY-ITERATION}" data-personalitykey="{PERSONALITY-KEY}">{PERSONALITY-TITLE}</option>';
+    this.traitOptionTemplate = '<option class="trait-option trait-option-{PERSONALITY-ITERATION}" data-personalitykey="{PERSONALITY-KEY}" value="{PERSONALITY-ITERATION}">{PERSONALITY-TITLE}</option>';
 
     this.add = function(trait, optionIteration) {
-      var updatedCloneHtml = this.traitClone;
+      // Since trait template is changed after page load, has to be pulled in on every add.
+      var updatedCloneHtml = $(".clone-templates .trait-template").html().replace('<tbody>', '').replace('</tbody>','');
       var questionIteration = $("#option-" + optionIteration).data("question");
       var pointsValue = (typeof(trait) !== "undefined" && trait != null) ? trait.points : 0;
 
@@ -243,21 +306,28 @@ function QuizCreator() {
 
       $("#option-" + optionIteration + " .traits-tbody").append(updatedCloneHtml);
 
+      if(trait) {
+        $("#traits-select-" + this.currentIteration + " option[data-personalitykey='" + trait.quiz_personality_id + "']").attr("selected", true);
+      }
+
       this.currentIteration++;
       return (this.currentIteration - 1);
     };
 
     this.remove = function(iterationNo) {
+      var selector = $("#trait-" + iterationNo);
 
+      $(selector).hide();
+      $(selector).data("removed", true);
     };
 
-    this.addPersonalityToSelects = function(personality, personalityIteration, selected) {
-      var newOption = this.traitOptionTemplate.replace('{PERSONALITY-ITERATION}', personalityIteration).replace('{PERSONALITY-KEY}', personality.id).replace('{PERSONALITY-TITLE}', personality.title);
+    this.addPersonalityToSelects = function(personality, personalityIteration) {
+      var newOption = this.traitOptionTemplate;
 
-      if(selected) {
-        newOption = newOption.replace('{SELECTED}', 'selected="selected"');
+      if(personality) {
+        newOption = newOption.replace('{PERSONALITY-ITERATION}', personalityIteration).replace('{PERSONALITY-KEY}', personality.id).replace('{PERSONALITY-TITLE}', personality.title);
       } else {
-        newOption = newOption.replace('{SELECTED}', '');
+        newOption = newOption.replace('{PERSONALITY-ITERATION}', personalityIteration).replace('{PERSONALITY-KEY}', '').replace('{PERSONALITY-TITLE}', 'Untitled');
       }
 
       $(".traits-select").append(newOption);
@@ -266,5 +336,9 @@ function QuizCreator() {
     this.updatePersonalitiesInSelects = function(personalityIteration, newTitle) {
       $(".trait-option-" + personalityIteration).html(newTitle);
     };
+
+    this.getSerialized = function() {
+      
+    }
   }
 }

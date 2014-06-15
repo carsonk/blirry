@@ -42,6 +42,7 @@ $globalTitle = 'blirry';
             	<li><a href="#">Quizzes</a></li>
             	<li><a href="#">Surveys</a></li>
             	<li><a href="#">Create</a></li>
+              <li><a href="#">Forums</a></li>
           	</ul>
 
       			<?php

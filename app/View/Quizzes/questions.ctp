@@ -28,14 +28,16 @@ $this->end();
     'placeholder' => 'Enter a title!',
     'div' => 'form-group',
     'label' => false,
-    'value' => $quizValue
+    'value' => $quizValue,
+    'name' => 'title'
   )); 
 
   echo $this->Form->input('description', array(
     'class' => 'form-control',
     'placeholder' => 'Enter a tagline for your quiz!',
     'div' => 'form-group',
-    'label' => false
+    'label' => false,
+    'name' => 'description'
   )); 
 
   ?>
@@ -159,10 +161,11 @@ $this->end();
           </div>
           <table class="table traits-config-table">
             <thead>
-              <th class="width-70">Personality</th>
-              <th class="width-30">
+              <th style="width: 70%;">Personality</th>
+              <th style="width: 20%;">
                 <abbr title="Use negative to remove.">Add/Remove Points</abbr>
               </th>
+              <th style="width: 10%;">Tools</th>
             </thead>
             <tbody class="traits-tbody faux-tbody">
               
@@ -183,6 +186,9 @@ $this->end();
       </td>
       <td>
         <input class="form-control" type="number" min="-100" max="100" value="{POINTS}" />
+      </td>
+      <td>
+          <a href="Javascript:quizCreator.Traits.remove('{ITERATION}'');">Remove</a>
       </td>
     </tr>
   </table>

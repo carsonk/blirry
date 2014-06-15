@@ -35,7 +35,8 @@ class QuizzesController extends AppController {
           'Personality',
           'Question' => array(
             'Option' => array(
-              'fields' => array('id', 'title')
+              'fields' => array('id', 'title'),
+              'Trait'
             )
           )
         )
