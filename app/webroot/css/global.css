@@ -103,14 +103,14 @@ body {
   border: none;
 }
   .navbar .container {
-    background: none;
+    background: #444;
   }
 	.navbar-brand {
 		font-family: 'Pacifico', cursive;
 		font-size: 20pt;
-		margin-top: -2px;
     color: #FFF;
     font-weight: lighter;
+    padding: 15px 18px 15px 15px;
 	}
     .navbar-brand:hover {
       color: #EEE;
@@ -119,11 +119,11 @@ body {
     color: #FFF;
   }
     ul.nav > li > a:hover {
-      color: #EEE+;
-      background-color: #333 !important;
+      color: #EEE;
+      background-color: inherit !important;
     }
     ul.nav > li > li:hover {
-      background-color: #333 !important;
+      background-color: inherit !important;
     }
   .navbar .nav .open > a,
     .nav .open > a:hover,
@@ -131,6 +131,27 @@ body {
       background-color: inherit !important;
       border-color: inherit !important;
     }
+  .primary-nav {
+
+  }
+    .primary-nav li:nth-child(1) {
+      background-color: #e18728;
+    }
+      .primary-nav li:nth-child(1):hover {
+        background-color: #C86E0F;
+      }
+    .primary-nav li:nth-child(2) {
+      background-color: #be4c39;
+    }
+      .primary-nav li:nth-child(2):hover {
+        background-color: #A53320;
+      }
+    .primary-nav li:nth-child(3) {
+      background-color: #4472b9;
+    }
+      .primary-nav li:nth-child(3):hover {
+        background-color: #2B59A0;
+      }
 
 .content-container {
   /*box-shadow: 0 0px 20px 3px #ccc;*/

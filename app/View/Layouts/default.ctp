@@ -35,10 +35,10 @@ $globalTitle = 'blirry';
 	<nav class="navbar" role="navigation">
   	<div class="container">
   		<div class="navbar-header">
-    			<a class="navbar-brand" href="#">blirry</a>
+  			<a class="navbar-brand" href="#">blirry</a>
   		</div>
       	<div class="collapse navbar-collapse">
-        		<ul class="nav navbar-nav">
+        		<ul class="nav navbar-nav primary-nav">
             	<li><a href="#">Quizzes</a></li>
             	<li><a href="#">Surveys</a></li>
             	<li><a href="#">Create</a></li>
