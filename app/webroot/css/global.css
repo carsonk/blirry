@@ -126,7 +126,9 @@ body {
     }
   .navbar .nav .open > a,
     .nav .open > a:hover,
-    .nav .open > a:focus {
+    .nav .open > a:focus,
+    .nav .open > a:active,
+    .nav .open > a:visited {
       background-color: inherit !important;
       border-color: inherit !important;
     }

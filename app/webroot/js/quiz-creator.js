@@ -7,6 +7,12 @@ function QuizCreator() {
   var instance = this;
   this.quizData = {};
 
+  var toBeRemoved = {
+    question: [],
+    options: [],
+    traits: []
+  };
+
   // Methods
 
   /*
@@ -156,6 +162,7 @@ function QuizCreator() {
 
       $(element).data("removed", "true");
       $(element).hide();
+      $(".trait-option-" + iterationNo).remove();
     };
 
     this.startTitleListener = function() {
@@ -168,7 +175,13 @@ function QuizCreator() {
     };
 
     this.getSerialized = function() {
+      var personalities = [];
 
+      $(".personality-manage-panel-body .personality").each(function() {
+        personalities.push( $(this).serializeObject() );
+      });
+
+      return personalities;
     }
   };
 
@@ -221,12 +234,33 @@ function QuizCreator() {
     };
 
     this.serializeSort = function() {
-      return $( ".question-manage-panel-body" ).sortable( "serialize", { key: "sort" } );
-    }
+      return $( ".question-manage-panel-body" ).sortable( 
+        "toArray", 
+        { attribute: "data-iteration" }
+      );
+    };
 
     this.getSerialized = function() {
+      var questions = [];
+      var iterationOrder = this.serializeSort();
 
-    }
+      $.each(iterationOrder, function(key, iterationNo) {
+        if($(this).data("removed") != "true") {
+          var question = {};
+          var selector = "#question-" + iterationNo;
+
+          question.questionIteration = $(selector).data("iteration");
+          question.questionKey = $(selector).data("dbkey");
+          question.question = $(selector + " .question-title-field").val();
+          question.image_url = "";
+          question.order = key;
+
+          questions.push(question);
+        }
+      });
+
+      return questions;
+    };
   };
   // </questions>
 
@@ -287,14 +321,28 @@ function QuizCreator() {
 
     };
 
-    this.getSerialized = function() {
+    this.getSerializedByQuestion = function(questionIteration) {
+      var options = [];
 
-    }
+      $("#question-" + questionIteration + " .option").each(function() {
+        if($(this).data("removed") != "true") {
+          var option = {}; 
+
+          option.optionIteration = $(this).data("option");
+          option.optionKey = $(this).data("dbkey");
+          option.title = $(this).children(".input-group").children(".option-title-field").val();
+          option.image_url = "";
+
+          options.push(option);
+        }
+      });
+
+      return options;
+    };
   };
 
   this.Traits = new function() {
     this.currentIteration = 0;
-    this.traitOptionTemplate = '<option class="trait-option trait-option-{PERSONALITY-ITERATION}" data-personalitykey="{PERSONALITY-KEY}" value="{PERSONALITY-ITERATION}">{PERSONALITY-TITLE}</option>';
 
     this.add = function(trait, optionIteration) {
       // Since trait template is changed after page load, has to be pulled in on every add.
@@ -322,12 +370,12 @@ function QuizCreator() {
     };
 
     this.addPersonalityToSelects = function(personality, personalityIteration) {
-      var newOption = this.traitOptionTemplate;
+      var newOption = '<option class="trait-option trait-option-{PERSONALITY-ITERATION}" data-personalitykey="{PERSONALITY-KEY}" value="{PERSONALITY-ITERATION}">{PERSONALITY-TITLE}</option>';
 
       if(personality) {
-        newOption = newOption.replace('{PERSONALITY-ITERATION}', personalityIteration).replace('{PERSONALITY-KEY}', personality.id).replace('{PERSONALITY-TITLE}', personality.title);
+        newOption = newOption.replace(/\{PERSONALITY-ITERATION\}/g, personalityIteration).replace('{PERSONALITY-KEY}', personality.id).replace('{PERSONALITY-TITLE}', personality.title);
       } else {
-        newOption = newOption.replace('{PERSONALITY-ITERATION}', personalityIteration).replace('{PERSONALITY-KEY}', '').replace('{PERSONALITY-TITLE}', 'Untitled');
+        newOption = newOption.replace(/\{PERSONALITY-ITERATION\}/g, personalityIteration).replace('{PERSONALITY-KEY}', '').replace('{PERSONALITY-TITLE}', 'Untitled');
       }
 
       $(".traits-select").append(newOption);
@@ -337,8 +385,33 @@ function QuizCreator() {
       $(".trait-option-" + personalityIteration).html(newTitle);
     };
 
-    this.getSerialized = function() {
-      
+    this.getSerializedByOption = function(optionIteration) {
+      var traits = [];
+
+      $("#option-" + optionIteration + " .trait").each(function() {
+        if($(this).data("removed") != true) {
+          var currentTrait = {
+            traitIteration: null,
+            personalityIteration: null,
+            personalityKey: null,
+            points: null
+          };
+
+          var selectSelector = $(this).children("td").children(".traits-select");
+          var pointsSelector = $(this).children("td").children(".traits-points");
+
+          currentTrait.traitIteration = $(this).data("trait");
+          currentTrait.personalityIteration = parseInt($(selectSelector).find(":selected").val());
+          currentTrait.personalityKey = $(selectSelector).find(":selected").data("personalitykey");
+          currentTrait.points = $(pointsSelector).val();
+
+          if(!isNaN(currentTrait.personalityIteration)) {
+            traits.push( currentTrait );
+          }
+        }
+      });
+
+      return traits;
     }
   }
 }

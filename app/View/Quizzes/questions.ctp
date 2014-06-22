@@ -178,17 +178,17 @@ $this->end();
 
   <!-- Trait -->
   <table class="trait-template">
-    <tr id="trait-{ITERATION}" class="trait" data-question="{QUESTION-ITERATION}" data-option="{OPTION-ITERATION}" data-trait="{ITERATION}" data-removed="false">
+    <tr id="trait-{ITERATION}" class="trait" data-option="{OPTION-ITERATION}" data-trait="{ITERATION}" data-removed="false">
       <td>
-        <select id="traits-select-{ITERATION}" class="traits-select form-control">
+        <select name="personality" id="traits-select-{ITERATION}" class="traits-select form-control">
           <option class="trait-option-blank" value=""></option>
         </select>
       </td>
       <td>
-        <input class="form-control" type="number" min="-100" max="100" value="{POINTS}" />
+        <input class="form-control traits-points" name="points" type="number" min="-100" max="100" value="{POINTS}" />
       </td>
       <td>
-          <a href="Javascript:quizCreator.Traits.remove('{ITERATION}'');">Remove</a>
+        <a href="javascript:quizCreator.Traits.remove('{ITERATION}');">Remove</a>
       </td>
     </tr>
   </table>
