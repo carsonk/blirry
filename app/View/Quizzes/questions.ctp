@@ -118,7 +118,7 @@ $this->end();
       <div class="panel-heading">
 
         <div class="input-group" style="width:100%;">
-          <span class="drag-handle input-group-addon" data-toggle="tooltip" data-placement="top" title="Click to drag.">
+          <span class="question-drag-handle input-group-addon" data-toggle="tooltip" data-placement="top" title="Click to drag.">
             <span class="glyphicon glyphicon-move"></span>
           </span>
           <input type="text" value="{QUESTION}" class="question-title-field form-control" id="question" placeholder="Ask a question?" />
@@ -139,8 +139,12 @@ $this->end();
 
   <!-- Option -->
   <div class="option-template">
-    <div class="option" id="option-{ITERATION}" data-question="{QUESTION-ITERATION}" data-option="{ITERATION}" data-dbkey="{KEY}" data-removed="false">
+    <div class="option" id="option-{ITERATION}" data-question="{QUESTION-ITERATION}" data-iteration="{ITERATION}" data-dbkey="{KEY}" data-removed="false">
       <div class="input-group" style="width:100%;">
+        <span class="option-drag-handle input-group-addon" data-toggle="tooltip" data-placement="top" title="Click to drag.">
+          <span class="glyphicon glyphicon-move"></span>
+        </span>
+
         <input type="text" class="option-title-field form-control" placeholder="Option" value="{TITLE}" />
 
         <span class="input-group-btn">

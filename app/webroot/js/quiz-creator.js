@@ -213,7 +213,7 @@ function QuizCreator() {
         instance.Options.add(null, this.currentIteration);
       }
 
-      $(".drag-handle").tooltip({});
+      $(".question-drag-handle").tooltip({});
 
       this.currentIteration++;
       return (this.currentIteration - 1);
@@ -229,7 +229,7 @@ function QuizCreator() {
     this.startSortableListener = function() {
       $(".question-manage-panel-body").sortable({
         containment: "parent",
-        handle: ".drag-handle"
+        handle: ".question-drag-handle"
       });
     };
 
@@ -287,6 +287,7 @@ function QuizCreator() {
         instance.Traits.add(null, this.currentIteration);
       }
 
+      this.startSortableListener(this.currentIteration);
       this.currentIteration++;
       return (this.currentIteration - 1);
     };
@@ -302,8 +303,23 @@ function QuizCreator() {
       $(toRemove).data("removed", true);
     };
 
-    this.startSortableListener = function() {
+    this.startSortableListener = function(questionIteration) {
+      var questionBody = $("#question-" + questionIteration + " .question-body");
 
+      $(questionBody).sortable({
+        containment: "parent",
+        handle: ".option-drag-handle",
+        items: "> .option"
+      });
+    };
+
+    this.serializeSort = function(questionIteration) {
+      var questionBody = $("#question-" + questionIteration + " .question-body");
+
+      return $( questionBody ).sortable( 
+        "toArray", 
+        { attribute: "data-iteration" }
+      );
     };
 
     this.startConfigListeners = function() {
@@ -317,21 +333,21 @@ function QuizCreator() {
       });
     };
 
-    this.serializeSort = function() {
-
-    };
-
     this.getSerializedByQuestion = function(questionIteration) {
       var options = [];
+      var iterationOrder = this.serializeSort(questionIteration);
 
-      $("#question-" + questionIteration + " .option").each(function() {
-        if($(this).data("removed") != "true") {
-          var option = {}; 
+      $.each(iterationOrder, function(key, iterationNo) {
+        var selector = $("#option-" + iterationNo);
 
-          option.optionIteration = $(this).data("option");
-          option.optionKey = $(this).data("dbkey");
-          option.title = $(this).children(".input-group").children(".option-title-field").val();
+        if(!$(selector).data("removed")) {
+          var option = {};
+
+          option.optionIteration = $(selector).data("iteration");
+          option.optionKey = $(selector).data("dbkey");
+          option.title = $(selector).children(".input-group").children(".option-title-field").val();
           option.image_url = "";
+          option.order = key;
 
           options.push(option);
         }
