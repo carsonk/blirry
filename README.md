@@ -17,7 +17,6 @@ Setup
 ----------------
 - Setup a local LAMP environment, if you do not already have one.
 - Create a app/Config/database.php. You can also do this by copying database.default.php into database.php, if the default settings are fine with you.
-- 
 
 Schema Changes
 ----------------
