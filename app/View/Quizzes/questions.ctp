@@ -68,7 +68,7 @@ $this->end();
   var quizCreator;
 
   $(document).ready(function() {
-    quizCreator = new QuizCreator();
+    quizCreator = new QuizCreator(<?php echo $currentQuiz['Quiz']['id']; ?>);
     quizCreator.init();
   });
 </script>

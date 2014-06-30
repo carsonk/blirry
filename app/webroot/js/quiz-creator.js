@@ -2,10 +2,11 @@
 * QuizCreator
 * Gets shit related to quiz creation done.
 */
-function QuizCreator() {
+function QuizCreator(quizKey) {
   // Properties
   var instance = this;
   this.quizData = {};
+  this.quizKey = quizKey;
 
   var toBeRemoved = {
     question: [],
@@ -91,7 +92,7 @@ function QuizCreator() {
   *                Used for determining completion.
   */
   this.getQuizData = function() {
-    return $.get(root + "quizzes/get.json", {quizID: 6}, function(data) {
+    return $.get(root + "quizzes/get.json", {quizID: this.quizKey}, function(data) {
       instance.quizData = data;
     }, "json");
   };
