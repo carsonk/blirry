@@ -4,15 +4,18 @@
 */
 function QuizCreator(quizKey) {
   // Properties
-  var instance = this;
-  this.quizData = {};
-  this.quizKey = quizKey;
 
-  var toBeRemoved = {
+  var instance = this;
+
+  this.toBeRemoved = {
     question: [],
     options: [],
     traits: []
   };
+  this.edited = false;
+  this.setup = false;
+  this.quizData = {};
+  this.quizKey = quizKey;
 
   // Methods
 
@@ -22,33 +25,36 @@ function QuizCreator(quizKey) {
   *                         current quiz. Can be empty.
   */
   this.init = function(quizData) {
-    App.showLoading();
+    if(!this.setup) {
+      App.showLoading();
 
-    // Completes page setup.
-    $.when( 
-      this.quizDataSetup(quizData) 
-    ).then(function() {
-      if(instance.quizData.Personality.length > 0) {
-        $.each(instance.quizData.Personality, function(key, currentPers) {
-          instance.Personalities.add(currentPers);
-        });
-      } else {
-        instance.Personalities.add();
-        instance.Personalities.add();
-      }
+      // Completes page setup.
+      $.when( 
+        this.quizDataSetup(quizData) 
+      ).then(function() {
+        if(instance.quizData.Personality.length > 0) {
+          $.each(instance.quizData.Personality, function(key, currentPers) {
+            instance.Personalities.add(currentPers);
+          });
+        } else {
+          instance.Personalities.add();
+          instance.Personalities.add();
+        }
 
-      if(instance.quizData.Question.length > 0) {
-        $.each(instance.quizData.Question, function(key, currentQues) {
-          instance.Questions.add(currentQues);
-        });
-      } else {
-        instance.Questions.add();
-        instance.Questions.add();
-      }
+        if(instance.quizData.Question.length > 0) {
+          $.each(instance.quizData.Question, function(key, currentQues) {
+            instance.Questions.add(currentQues);
+          });
+        } else {
+          instance.Questions.add();
+          instance.Questions.add();
+        }
 
-      instance.setupListeners();
-      App.closeLoading();
-    });
+        instance.setupListeners();
+        App.closeLoading();
+        instance.setup = true;
+      });
+    }
   };
 
   /*
@@ -120,7 +126,6 @@ function QuizCreator(quizKey) {
     $.ajax({
       type: "POST",
       url: "",
-      // The key needs to match your method's input parameter (case-sensitive).
       data: JSON.stringify(postData),
       contentType: "application/json; charset=utf-8",
       dataType: "json",
@@ -151,7 +156,10 @@ function QuizCreator(quizKey) {
         instance.Traits.addPersonalityToSelects(personality, this.currentIteration);
       } else {
         instance.Traits.addPersonalityToSelects(null, this.currentIteration);
-        $.scrollTo($("#personality-" + this.currentIteration), { duration: 500, over: -.5 });
+
+        if(instance.setup) { 
+          $.scrollTo($("#personality-" + this.currentIteration), { duration: 500, over: -.5 }); 
+        }
       }
 
       this.currentIteration++;
@@ -207,7 +215,9 @@ function QuizCreator(quizKey) {
           instance.Options.add(option, instance.Questions.currentIteration);
         });
       } else {
-        $.scrollTo($("#question-" + this.currentIteration), { duration: 300 });
+        if(instance.setup) {
+          $.scrollTo($("#question-" + this.currentIteration), { duration: 300 });
+        }
 
         // Add to blank options.
         instance.Options.add(null, this.currentIteration);
