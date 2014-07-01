@@ -11,11 +11,11 @@ function QuizCreator(quizKey) {
     question: [],
     options: [],
     traits: []
-  };
-  this.edited = false;
-  this.setup = false;
-  this.quizData = {};
-  this.quizKey = quizKey;
+  }; // (obj) Object containing arrays of item iterations that need removal.
+  this.edited = false; // (bool) Whether form has been edited.
+  this.setup = false; // (bool)
+  this.quizData = {}; // (obj) Object containing quiz data.
+  this.quizKey = quizKey; // (int) Quiz key.
 
   // Methods
 
