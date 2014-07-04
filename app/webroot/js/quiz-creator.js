@@ -123,7 +123,9 @@ function QuizCreator(quizKey) {
       "Question": questionData
     };
 
-    $.ajax({
+    console.log(postData);
+
+    /*$.ajax({
       type: "POST",
       url: "",
       data: JSON.stringify(postData),
@@ -133,7 +135,7 @@ function QuizCreator(quizKey) {
       failure: function(errMsg) {
           console.log(errMsg);
       }
-    });
+    });*/
   }
 
   // Inner Objects
@@ -226,6 +228,8 @@ function QuizCreator(quizKey) {
 
       $(".question-drag-handle").tooltip({});
 
+      instance.Options.startSortableListener(this.currentIteration);
+
       this.currentIteration++;
       return (this.currentIteration - 1);
     };
@@ -266,6 +270,8 @@ function QuizCreator(quizKey) {
           question.image_url = "";
           question.order = key;
 
+          question.options = instance.Options.getSerializedByQuestion(iterationNo);
+
           questions.push(question);
         }
       });
@@ -298,7 +304,6 @@ function QuizCreator(quizKey) {
         instance.Traits.add(null, this.currentIteration);
       }
 
-      this.startSortableListener(this.currentIteration);
       this.currentIteration++;
       return (this.currentIteration - 1);
     };
@@ -326,7 +331,6 @@ function QuizCreator(quizKey) {
 
     this.serializeSort = function(questionIteration) {
       var questionBody = $("#question-" + questionIteration + " .question-body");
-
       return $( questionBody ).sortable( 
         "toArray", 
         { attribute: "data-iteration" }
@@ -359,6 +363,8 @@ function QuizCreator(quizKey) {
           option.title = $(selector).children(".input-group").children(".option-title-field").val();
           option.image_url = "";
           option.order = key;
+
+          option.traits = instance.Traits.getSerializedByOption(option.optionIteration);
 
           options.push(option);
         }
