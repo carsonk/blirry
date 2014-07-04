@@ -346,6 +346,16 @@ function QuizCreator(quizKey) {
           $(affectedSection).slideDown();
         }
       });
+
+      // hide option configuration when clicking outside of a question
+      $(document).mouseup(function (e) {
+        var container = $(".question");
+
+        if (!container.is(e.target) 
+          && container.has(e.target).length === 0) {
+          $(".option-manage-section:visible").slideUp();
+        }
+      });
     };
 
     this.getSerializedByQuestion = function(questionIteration) {
