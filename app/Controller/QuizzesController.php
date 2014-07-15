@@ -14,19 +14,6 @@ class QuizzesController extends AppController {
     )
   );
 
-  public $quizContainSettings = array(
-    'Creator' => array(
-      'fields' => array('Creator.id', 'Creator.username')
-    ),
-    'Personality',
-    'Question' => array(
-      'Option' => array(
-        'fields' => array('id', 'title'),
-        'Trait'
-      )
-    )
-  );
-
 	public function index() {
     $this->Paginator->settings = $this->paginate;
 
@@ -41,7 +28,18 @@ class QuizzesController extends AppController {
     if($this->request->is('get')) {
       $currentQuiz = $this->Quiz->find('first', array(
         'conditions' => array('Quiz.id' => $this->request->query['quizID']),
-        'contain' => $this->quizContainSettings
+        'contain' => array(
+          'Creator' => array(
+            'fields' => array('Creator.id', 'Creator.username')
+          ),
+          'Personality',
+          'Question' => array(
+            'Option' => array(
+              'fields' => array('id', 'title'),
+              'Trait'
+            )
+          )
+        )
       ));
 
       if(!$currentQuiz) {
@@ -98,53 +96,5 @@ class QuizzesController extends AppController {
     $this->set('currentQuiz', $activeQuiz);
     $this->set('quizTypeForDisplay', $quizTypeForDisplay);
     $this->render('questions');
-  }
-
-  public function update() {
-    if( !( $this->request->is('post') ) ) {
-      throw new BadRequestException('No data was submitted.');
-    }
-
-    $data = $this->request->input('json_decode');
-
-    $this->processQuiz($data);
-
-    $this->autoRender = false;
-  }
-
-  /*
-  * Takes unserialized JSON quiz, breaks it up, and submits it to the server.
-  * @param quiz Unserialized JSON quiz.
-  */
-  private function processQuiz($quiz) {
-    $quizID = $quiz->Quiz->key;
-
-    if(!is_int($quizID)) {
-      throw new BadRequestException('No ID was given.');
-    }
-
-    $oldQuiz = $this->Quiz->find('first', array(
-      'conditions' => array('Quiz.id' => $quizID),
-      'contain' => $this->quizContainSettings
-    ));
-
-    if(empty($oldQuiz)) {
-      throw new NotFoundException('Could not find that quiz.');
-    }
-
-    // Ownership test.
-    if($this->Auth->user('id') != $oldQuiz["Quiz"]["user_id"]) {
-      throw new ForbiddenException('That quiz does not belong to you.');
-    }
-
-    /* Trick way to convert nested objects to arrays. Note that you're working with a
-      single-level object that you want to convert to an array, you can type-cast
-      the object to an array with $array = (array) $object. Also note that this is a
-      testament to both how great and how really shitty PHP is. If anyone at Oracle 
-      ever suggested that shit with Java, they would almost certainly be fired on 
-      the spot. */
-    $newQuiz = json_decode(json_encode($quiz), TRUE);
-
-    print_r($newQuiz);
   }
 }
