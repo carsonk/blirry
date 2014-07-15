@@ -108,8 +108,9 @@ function QuizCreator(quizKey) {
   * @returns array Array containing form data.
   */
   this.getSerializedMeta = function() {
-    var serialized = $("#QuizQuestionsForm").serializeObject();
-    return serialized;
+    var form = $("#QuizQuestionsForm").serializeObject();
+    form.key = this.quizKey;
+    return form;
   };
 
   this.save = function() {
@@ -125,17 +126,17 @@ function QuizCreator(quizKey) {
 
     console.log(postData);
 
-    /*$.ajax({
+    $.ajax({
       type: "POST",
-      url: "",
+      url: "../../update",
       data: JSON.stringify(postData),
-      contentType: "application/json; charset=utf-8",
-      dataType: "json",
+      contentType: "application/json",
+      dataType: "html",
       success: function(data) { console.log(data); },
       failure: function(errMsg) {
-          console.log(errMsg);
+        console.log(errMsg);
       }
-    });*/
+    });
   }
 
   // Inner Objects
@@ -177,7 +178,7 @@ function QuizCreator(quizKey) {
     };
 
     this.startTitleListener = function() {
-      $(".personality-manage-panel-body").on("blur", ".question-title-field", function() {
+      $(".personality-manage-panel-body").on("blur", ".personality-title-field", function() {
         var personalityIteration = $(this).parents(".personality").data("iteration");
         var newTitle = $(this).val();
 
@@ -189,7 +190,15 @@ function QuizCreator(quizKey) {
       var personalities = [];
 
       $(".personality-manage-panel-body .personality").each(function() {
-        personalities.push( $(this).serializeObject() );
+        var personality = {};
+
+        personality.personalityIteration = $(this).data('iteration');
+        personality.personalityKey = $(this).data('dbkey');
+        personality.title = $(this).find('.personality-title-field').val();
+        personality.description = $(this).find('.personality-details').val();
+        personality.image_url = $(this).find('.personality-image-url').val();
+
+        personalities.push( personality );
       });
 
       return personalities;
