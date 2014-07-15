@@ -87,7 +87,7 @@ $this->end();
       <div class="panel-heading">
 
         <div class="input-group" style="width:100%;">
-          <input type="text" id="personality-title-{ITERATION}" name="personality-title[{ITERATION}]" class="question-title-field form-control" id="question" value="{TITLE}" placeholder="Personality Title" />
+          <input type="text" id="personality-title-{ITERATION}" name="personality-title[{ITERATION}]" class="personality-title-field form-control" value="{TITLE}" placeholder="Personality Title" />
           <span class="input-group-btn">
             <button class="btn btn-warning" onclick="quizCreator.Personalities.remove({ITERATION});">Remove</button>
           </span>
@@ -99,11 +99,11 @@ $this->end();
         <div class="form">
           <div class="form-group">
             <label>Personality Details</label>
-            <textarea class="form-control" id="personality-details-{ITERATION}" placeholder="Give a description for this personality.">{DETAILS}</textarea>
+            <textarea class="form-control personality-details" id="personality-details-{ITERATION}" placeholder="Give a description for this personality.">{DETAILS}</textarea>
           </div>
           <div class="personality-image form-group">
             <label>Image URL</label>
-            <input class="form-control" id="personality-image-url-{ITERATION}" name="personality-image-url[{ITERATION}]" type="text" name="url" value="{IMAGE-URL}" placeholder="http://example.com/image.jpg" />
+            <input class="form-control personality-image-url" id="personality-image-url-{ITERATION}" name="personality-image-url[{ITERATION}]" type="text" name="url" value="{IMAGE-URL}" placeholder="http://example.com/image.jpg" />
           </div>
         </div>
       </div>
